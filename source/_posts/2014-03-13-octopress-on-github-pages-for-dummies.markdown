@@ -60,7 +60,7 @@ With Octopress, the source for generating the site is kept on the 'source' branc
 
 ---
 
-Now, you could continue to develop your site, add some posts and whatnot -- but I recommend you do two things first:
+Now, you could continue to develop your site, add some posts and whatnot -- but I recommend you do two things first:[^2]
 
   - `cd ..; rm -rf octopress`
   - `git clone git@github.com:<username>/<username>.github.io`
@@ -69,3 +69,5 @@ This will help `git` get straightened out with all of the remote tracking branch
 
 
 [^1]: technically, it is *possible* to uninstall gems (see http://stackoverflow.com/a/21385516/32683 or http://stackoverflow.com/a/8095234/32683 -- where would the world be without StackOverflow?)
+
+[^2]: in the current version of Octopress (affa3ffb) `rake deploy` fails if the `_deploy` directory doesn't exist (instead of creating it), and `_deploy` is in the `.gitignore` so if you start from a fresh clone you'll get an error -- just `mkdir _deploy` to fix it.
