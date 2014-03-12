@@ -4,7 +4,7 @@
   <title><![CDATA[gensym("blog")]]></title>
   <link href="http://cordarei.github.io/atom.xml" rel="self"/>
   <link href="http://cordarei.github.io/"/>
-  <updated>2014-03-13T04:24:55+09:00</updated>
+  <updated>2014-03-13T04:36:55+09:00</updated>
   <id>http://cordarei.github.io/</id>
   <author>
     <name><![CDATA[Joseph Irwin]]></name>
@@ -70,11 +70,13 @@
 
 <hr />
 
-<p>Now, you could continue to develop your site, add some posts and whatnot &mdash; but I recommend you do two things first:<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+<p>Now, you could continue to develop your site, add some posts and whatnot &mdash; but I recommend you do two things first:</p>
 
 <ul>
 <li><code>cd ..; rm -rf octopress</code></li>
-<li><code>git clone git@github.com:&lt;username&gt;/&lt;username&gt;.github.io</code></li>
+<li><code>git clone -b source git@github.com:&lt;username&gt;/&lt;username&gt;.github.io</code></li>
+<li><code>cd &lt;username&gt;.github.io</code></li>
+<li><code>git clone -b master git@github.com:&lt;username&gt;/&lt;username&gt;.github.io _deploy</code><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></li>
 </ul>
 
 
@@ -85,7 +87,7 @@
 <li id="fn:1">
 <p>technically, it is <em>possible</em> to uninstall gems (see http://stackoverflow.com/a/21385516/32683 or http://stackoverflow.com/a/8095234/32683 &mdash; where would the world be without StackOverflow?)<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
-<p>in the current version of Octopress (affa3ffb) <code>rake deploy</code> fails if the <code>_deploy</code> directory doesn&rsquo;t exist (instead of creating it), and <code>_deploy</code> is in the <code>.gitignore</code> so if you start from a fresh clone you&rsquo;ll get an error &mdash; just <code>mkdir _deploy</code> to fix it.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<p>see, e.g., http://robstrube.com/blog/2014/02/21/setting-up-an-existing-octopress-site-on-a-new-system/ or http://weishi.github.io/blog/2013/07/24/setup-an-existing-octopress-repository-after-git-clone/ &mdash; seriously, do the Octopress people really expect no one to ever move to a different computer?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
