@@ -60,14 +60,16 @@ With Octopress, the source for generating the site is kept on the 'source' branc
 
 ---
 
-Now, you could continue to develop your site, add some posts and whatnot -- but I recommend you do two things first:[^2]
+Now, you could continue to develop your site, add some posts and whatnot -- but I recommend you do two things first:
 
   - `cd ..; rm -rf octopress`
-  - `git clone git@github.com:<username>/<username>.github.io`
+  - `git clone -b source git@github.com:<username>/<username>.github.io`
+  - `cd <username>.github.io`
+  - `git clone -b master git@github.com:<username>/<username>.github.io _deploy`[^2]
     
 This will help `git` get straightened out with all of the remote tracking branches etc. The only problem is you have to run `bundle install --path .bundle` again -- oops. Of course I thought of that before deleting the original directory...
 
 
 [^1]: technically, it is *possible* to uninstall gems (see http://stackoverflow.com/a/21385516/32683 or http://stackoverflow.com/a/8095234/32683 -- where would the world be without StackOverflow?)
 
-[^2]: in the current version of Octopress (affa3ffb) `rake deploy` fails if the `_deploy` directory doesn't exist (instead of creating it), and `_deploy` is in the `.gitignore` so if you start from a fresh clone you'll get an error -- just `mkdir _deploy` to fix it.
+[^2]: see, e.g., http://robstrube.com/blog/2014/02/21/setting-up-an-existing-octopress-site-on-a-new-system/ or http://weishi.github.io/blog/2013/07/24/setup-an-existing-octopress-repository-after-git-clone/ -- seriously, do the Octopress people really expect no one to ever move to a different computer?
