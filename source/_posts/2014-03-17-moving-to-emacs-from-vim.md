@@ -7,7 +7,7 @@ categories:
 ---
 
 
-So you're a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant *I*—*I* am a dye-in-the-wool vimmer and *I* want to use Emacs.)
+So you're a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant *I*—*I* am a dye-in-the-wool vimmer and *I* want to use Emacs.) Let us go on a journey together…
 
 ## Reasons
 
@@ -18,7 +18,7 @@ Here are some reasons I can think of to use Emacs:
 - because Emacs GUI works better in Windows than GVim [^1]
 - because Emacs Lisp is nicer than Vimscript [^2]
 
-A lot of my motivation has to do with my workflow, which is a mix of tmux and vim in the terminal. It’s pretty nice, especially with Tim Pope’s [vim-tbone][tbone] plugin, which gives you `Tyank` and `Tput` commands to communicate with the tmux copy buffer. However, I got curious what it would be like for the editor and shell to be more equal, which Emacs seems to offer.
+A lot of my motivation has to do with my workflow, which is a mix of tmux and vim in the terminal. It works pretty well, especially with Tim Pope’s [vim-tbone][tbone] plugin, which gives you `Tyank` and `Tput` commands to communicate with the tmux copy buffer. However, I got curious what it would be like for the editor and shell to be more equal, which Emacs seems to offer.
 
 > “Why use Emacs in a terminal when you can use a terminal in Emacs?”
 
@@ -26,9 +26,9 @@ A lot of my motivation has to do with my workflow, which is a mix of tmux and vi
 
 ## Preparation
 
-Since you are like me, I’m assuming you don’t have any Emacs configuration files, no `.Emacs` or `.Emacs.d/`. I recommend creating a directory `Emacs.d/` (no leading ‘.’) in a git repository somewhere.[^3] You can then check out the repository on any system and symlink the `Emacs.d/` directory to `~/.Emacs.d/` (with leading dot). You can look at my [dotfiles][] repo for reference if you like.
+Since you are like me, I’m assuming you don’t have any Emacs configuration files, no `.emacs` or `.emacs.d/`. I recommend creating a directory `emacs.d/` (no leading ‘.’) in a git repository somewhere.[^3] You can then check out the repository on any system and symlink the `emacs.d/` directory to `~/.emacs.d/` (with leading dot). You can look at my [dotfiles][] repo for reference if you like.
 
-Anyway, now inside the `Emacs.d/` directory create a file named `init.el`. Emacs will read the file at `~/.Emacs.d/init.el` during startup; we will be putting all of our customizations inside this file for now. Before we put anything into `init.el`, you can try starting up Emacs to see what it’s like. To move around, `<Ctrl>-p` and `<Ctrl>-n` move up and down, and `<Ctrl>-f` and `<Ctrl>-b` move forward and backward. To quit press `<Ctrl>-x <Ctrl>-c` (that is, hold down `<Ctrl>` and press `x` and then `c`).
+Anyway, now inside the `emacs.d/` directory create a file named `init.el`. Emacs will read the file at `~/.emacs.d/init.el` during startup; we will be putting all of our customizations inside this file for now. Before we put anything into `init.el`, you can try starting up Emacs to see what it’s like. To move around, `<Ctrl>-p` and `<Ctrl>-n` move up and down, and `<Ctrl>-f` and `<Ctrl>-b` move forward and backward. To quit press `<Ctrl>-x <Ctrl>-c` (that is, hold down `<Ctrl>` and press `x` and then `c`).
 
 Since Emacs is modeless, `hjkl` and other printable characters always insert themselves, and thus to execute commands you have to use modifier keys. `<Ctrl>` is okay, since [you should have CAPS LOCK mapped to Control][swapcaps] [^4]  (or [for Windows][windowsswap]), but Emacs makes you press the `Alt` key, which I am not going to put up with, so we’ll be using an Emacs plugin called ‘evil’ to make Emacs more like Vim.
 
@@ -38,7 +38,7 @@ Since Emacs is modeless, `hjkl` and other printable characters always insert the
 Don’t worry, I won’t make you edit your `init.el` from inside Emacs (you can try it if you want to, but you’ll need to quit and restart Emacs every time you change it), so let’s just open it inside Vim:
 
 ``` bash
-$ vim ~/.Emacs.d/init.el
+$ vim ~/.emacs.d/init.el
 ```
 
 and add the following lines:
@@ -61,7 +61,9 @@ Now, type `<Alt>-x` (the only time I’ll ask you to press the Alt key, I swear!
 
 !
 
-The cursor should have moved up a line! If you look at the mode line (the status line at the bottom of the window) you should see `<N>`. That indicates that you’re in the evil normal *state*. In evil, *states* are the equivalent of Vim’s modes, because Emacs already uses the word ‘mode’ for something more like Vim’s ‘filetype’. If you type `i` or `a` you will enter *insert* state (Vim’s insert mode). At this point you can just start doing whatever you would do in Vim. Some things won’t work, a few things will be slightly different, but mostly things will work in evil just as they do in Vim—including things that don’t work in `vi`, because evil is a *Vim* mode for Emacs, not a *vi* mode. Ex (colon) commands work as well, which I understand is a fairly recent change. You can type `:ls<Enter>` and the Emacs ‘Buffer List’ buffer will come up. You can hit `q` here to close the buffer list and return to the scratch buffer, because evil leaves some keybindings alone in some Emacs modes. Unfortunately, you **can’t** hit `Enter` to open up a buffer[^5]—it just moves down a line. This is a good place to use another evil feature: by default, the `\` key escapes one key press to execute the original Emacs command bound to that key; if you hit `\` and then `Enter`, it should open the buffer you selected.
+The cursor should have moved up a line! If you look at the mode line (the status line at the bottom of the window) you should see `<N>`. That indicates that you’re in the evil normal *state*. In evil, *states* are the equivalent of Vim’s modes, because Emacs already uses the word ‘mode’ for something more like Vim’s ‘filetype’. If you type `i` or `a` you will enter *insert* state (Vim’s insert mode). At this point you can just start doing whatever you would do in Vim. Some things won’t work, a few things will be slightly different, but mostly things will work in evil just as they do in Vim—including things that don’t work in `vi`, because evil is a *Vim* mode for Emacs, not a *vi* mode.
+
+Ex (colon) commands work as well, which I understand is a fairly recent change. You can type `:ls<Enter>` and the Emacs ‘Buffer List’ buffer will come up. You can hit `q` here to close the buffer list and return to the scratch buffer, because evil leaves some keybindings alone in some Emacs modes. Unfortunately, you **can’t** hit `Enter` to open up a buffer[^5]—it just moves down a line. This is a good place to use another evil feature: by default, the `\` key escapes one key press to execute the original Emacs command bound to that key; if you hit `\` and then `Enter`, it should open the buffer you selected.
 
 
 ## Leveling Up
@@ -107,7 +109,7 @@ That’s what I thought. Put these lines at the end of your `init.el`:
 (menu-bar-mode -1)
 ```
 
-Restart Emacs, and— ahh! Much better! You can never have too much screen real-estate. If you do want to show the menu termporarily, just type `:menu-bar-mode` to toggle the menu on and off.
+Restart Emacs, and— ahh! Much better! You can never have too much screen real-estate. If you do want to show the menu temporarily, just type `:menu-bar-mode` to toggle the menu on and off.
 
 
 ### Colors!
@@ -127,7 +129,12 @@ If you’re not familiar with Lisp, `(setq x '(…))` sets the value of variable
 
 Of course, just installing the package doesn’t cut it, so add `(load-theme 'monokai t)` to the end of your `init.el` (you can put it anywhere, actually, I just think it feels right as the last thing in the file).
 
-If you don’t like Monokai, you can try [Solarized for emacs](https://github.com/sellout/emacs-color-theme-solarized) (add `color-theme-solarized` to `packages` and `(load-theme 'solarized-[light|dark] t)` instead of `(load-theme 'monokai t)`).
+If you don’t like Monokai, you can try [Solarized for Emacs](https://github.com/sellout/emacs-color-theme-solarized) (add `color-theme-solarized` to `packages` and `(load-theme 'solarized-[light|dark] t)` instead of `(load-theme 'monokai t)`).
+
+
+## tl;dr
+
+Download the file at https://gist.github.com/cordarei/9600170 to `~/.emacs.d/init.el`, start Emacs, and enjoy Vim keybindings in Emacs!
 
 
 
@@ -137,7 +144,7 @@ If you don’t like Monokai, you can try [Solarized for emacs](https://github.co
 
 [^3]: GitHub is nice.
 
-[^4]: I found someone saying [you should NOT swap Caps Lock with Control][noswap] for the first time when writing this post; YMMV but I prefer Control in the Caps Lock position.
+[^4]: I found someone saying <a href="http://ergoemacs.org/emacs/swap_CapsLock_Ctrl.html">you should NOT swap Caps Lock with Control</a> for the first time when writing this post; YMMV but I prefer Control in the Caps Lock position.
 
 [^5]: I thought this would work before I tried it just now, but it didn’t :(
 
