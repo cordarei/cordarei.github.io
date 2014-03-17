@@ -4,7 +4,7 @@
   <title><![CDATA[gensym("blog")]]></title>
   <link href="http://cordarei.github.io/atom.xml" rel="self"/>
   <link href="http://cordarei.github.io/"/>
-  <updated>2014-03-13T04:36:55+09:00</updated>
+  <updated>2014-03-17T23:49:50+09:00</updated>
   <id>http://cordarei.github.io/</id>
   <author>
     <name><![CDATA[Joseph Irwin]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Moving to Emacs From Vim]]></title>
+    <link href="http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim/"/>
+    <updated>2014-03-17T12:47:22+09:00</updated>
+    <id>http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim</id>
+    <content type="html"><![CDATA[<p>So you&rsquo;re a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant <em>I</em>—<em>I</em> am a dye-in-the-wool vimmer and <em>I</em> want to use Emacs.) Let us go on a journey together…</p>
+
+<h2>Reasons</h2>
+
+<p>Here are some reasons I can think of to use Emacs:</p>
+
+<ul>
+<li>to get used to Emacs, for instance to be able to work on systems that don&rsquo;t have Vim installed (shudder)</li>
+<li>to make use of some Emacs plugin that doesn&rsquo;t have a good substitute in Vim (e.g. org-mode)</li>
+<li>because Emacs GUI works better in Windows than GVim <sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+<li>because Emacs Lisp is nicer than Vimscript <sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></li>
+</ul>
+
+
+<p>A lot of my motivation has to do with my workflow, which is a mix of tmux and vim in the terminal. It works pretty well, especially with Tim Pope’s <a href="https://github.com/tpope/vim-tbone">vim-tbone</a> plugin, which gives you <code>Tyank</code> and <code>Tput</code> commands to communicate with the tmux copy buffer. However, I got curious what it would be like for the editor and shell to be more equal, which Emacs seems to offer.</p>
+
+<blockquote><p>“Why use Emacs in a terminal when you can use a terminal in Emacs?”</p>
+
+<p>— Me</p></blockquote>
+
+<h2>Preparation</h2>
+
+<p>Since you are like me, I’m assuming you don’t have any Emacs configuration files, no <code>.emacs</code> or <code>.emacs.d/</code>. I recommend creating a directory <code>emacs.d/</code> (no leading ‘.’) in a git repository somewhere.<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup> You can then check out the repository on any system and symlink the <code>emacs.d/</code> directory to <code>~/.emacs.d/</code> (with leading dot). You can look at my <a href="https://github.com/cordarei/dotfiles">dotfiles</a> repo for reference if you like.</p>
+
+<p>Anyway, now inside the <code>emacs.d/</code> directory create a file named <code>init.el</code>. Emacs will read the file at <code>~/.emacs.d/init.el</code> during startup; we will be putting all of our customizations inside this file for now. Before we put anything into <code>init.el</code>, you can try starting up Emacs to see what it’s like. To move around, <code>&lt;Ctrl&gt;-p</code> and <code>&lt;Ctrl&gt;-n</code> move up and down, and <code>&lt;Ctrl&gt;-f</code> and <code>&lt;Ctrl&gt;-b</code> move forward and backward. To quit press <code>&lt;Ctrl&gt;-x &lt;Ctrl&gt;-c</code> (that is, hold down <code>&lt;Ctrl&gt;</code> and press <code>x</code> and then <code>c</code>).</p>
+
+<p>Since Emacs is modeless, <code>hjkl</code> and other printable characters always insert themselves, and thus to execute commands you have to use modifier keys. <code>&lt;Ctrl&gt;</code> is okay, since <a href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">you should have CAPS LOCK mapped to Control</a> <sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>  (or <a href="http://stackoverflow.com/a/840716/32683">for Windows</a>), but Emacs makes you press the <code>Alt</code> key, which I am not going to put up with, so we’ll be using an Emacs plugin called ‘evil’ to make Emacs more like Vim.</p>
+
+<h2>Onward!</h2>
+
+<p>Don’t worry, I won’t make you edit your <code>init.el</code> from inside Emacs (you can try it if you want to, but you’ll need to quit and restart Emacs every time you change it), so let’s just open it inside Vim:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>vim ~/.emacs.d/init.el
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and add the following lines:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;cl</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;package</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;package-archives</span>
+</span><span class='line'>             <span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;melpa&quot;</span> <span class="o">.</span> <span class="s">&quot;http://melpa.milkbox.net/packages/&quot;</span><span class="p">)</span> <span class="no">t</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The default Emacs package repository at <a href="http://elpa.gnu.org/">http://elpa.gnu.org/</a> contains a limited set of packages, and most importantly for our purposes does not contain <a href="http://www.emacswiki.org/emacs/Evil">evil</a>, so we are adding the <a href="http://melpa.milkbox.net/">MELPA</a> repository, which does have evil, along with a lot of other packages. The first two lines import the <code>cl</code> package and the <code>package</code> package. The <code>package</code> package imports things related to packages (duh), like the <code>package-archives</code> variable or the <code>package-install</code> function we will use shortly. The <code>cl</code> package is the Common Lisp compatibility package; I’m not actually sure of everything it does, but some things seem to need it and it’s probably just easiest to add it in at the very beginning.</p>
+
+<p>At this point, you can start up Emacs, and from the ‘Options’ menu choose ‘Manage Emacs Packages’. You should see a list of packages, and if you scroll down a bit, you should find the ‘evil’ package listed, along with some evil plugin packages like ‘evil-leader’. Try clicking on the blue ‘evil’ link. A window split should open up with the bottom half showing details for the ‘evil’ package. There is an <code>Install</code> button that you can press to install the package; alternatively, you can (in the top window) press <code>i</code> on the ‘evil’ package line to mark it for install and then press <code>x</code> to install it. Either way, some messages will flash by in the bottom window about compiling whatever, possibly some warnings which you can ignore (I do), and then evil will be installed! Great!</p>
+
+<p>Of course, nothing changes because it isn’t activated automatically. First, click in the top window (with the package list), type <code>&lt;Ctrl&gt;-x 1</code> to close the bottom window (if you opened it), and type <code>q</code> to quit the package manager interface. You should return to the ‘GNU Emacs’ start screen. Open up the scratch buffer by going to the ‘Buffer’ menu and selecting ‘*scratch*’. Emacs automatically creates this *scratch* buffer every time you run it and the contents are not saved when Emacs quits. It’s useful for typing stuff, which is what we’re going to do. First try typing something and see that everything is still just like it was, typing letters inserts them and the <code>&lt;Ctrl&gt;-</code> keys move around.</p>
+
+<p>Now, type <code>&lt;Alt&gt;-x</code> (the only time I’ll ask you to press the Alt key, I swear!) and at the prompt (in the minibuffer at the bottom of the screen) type <code>evil-mode</code> and hit Enter. What changed? Try typing <code>k</code>.</p>
+
+<p>!</p>
+
+<p>The cursor should have moved up a line! If you look at the mode line (the status line at the bottom of the window) you should see <code>&lt;N&gt;</code>. That indicates that you’re in the evil normal <em>state</em>. In evil, <em>states</em> are the equivalent of Vim’s modes, because Emacs already uses the word ‘mode’ for something more like Vim’s ‘filetype’. If you type <code>i</code> or <code>a</code> you will enter <em>insert</em> state (Vim’s insert mode). At this point you can just start doing whatever you would do in Vim. Some things won’t work, a few things will be slightly different, but mostly things will work in evil just as they do in Vim—including things that don’t work in <code>vi</code>, because evil is a <em>Vim</em> mode for Emacs, not a <em>vi</em> mode.</p>
+
+<p>Ex (colon) commands work as well, which I understand is a fairly recent change. You can type <code>:ls&lt;Enter&gt;</code> and the Emacs ‘Buffer List’ buffer will come up. You can hit <code>q</code> here to close the buffer list and return to the scratch buffer, because evil leaves some keybindings alone in some Emacs modes. Unfortunately, you <strong>can’t</strong> hit <code>Enter</code> to open up a buffer<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>—it just moves down a line. This is a good place to use another evil feature: by default, the <code>\</code> key escapes one key press to execute the original Emacs command bound to that key; if you hit <code>\</code> and then <code>Enter</code>, it should open the buffer you selected.</p>
+
+<h2>Leveling Up</h2>
+
+<p>This is all well and good, but currently every time you start Emacs you will have to type <code>&lt;Alt&gt;-x evil-mode &lt;Enter&gt;</code>—the horror! So let’s close Emacs and go back to our Vim where we have <code>init.el</code> open. Add these two lines to the end:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="nv">package-initialize</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nv">evil-mode</span> <span class="no">t</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Emacs actually calls <code>package-initialize</code> automatically, but only after it loads <code>init.el</code>, and we need it to use things in packages, so we call it ourselves. The last line activates evil, so that every time we start Emacs, it will start in evil mode. Try it: (re-)start Emacs, see that the mode line shows <code>&lt;N&gt;</code> and you can move around with <code>hjkl</code>, go to the *scratch* buffer (try <code>:b&lt;Space&gt;scr&lt;Tab&gt;</code> and hit Enter), type– whatever, you know what you’re doing by now.</p>
+
+<h2>Going Further</h2>
+
+<p>So this is great, again, but what happens when you move to a different system, or reinstall your OS? You’d have to install evil manually again. Wait—I know what you’re going to say, and I have the answer:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="nb">defun</span> <span class="nv">ensure-package</span> <span class="p">(</span><span class="nc">package</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">package-installed-p</span> <span class="nc">package</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nv">package-refresh-contents</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nv">package-install</span> <span class="nc">package</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nv">ensure-package</span> <span class="ss">&#39;evil</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Put these lines after <code>(package-initialize)</code> and before <code>(evil-mode t)</code>, then to test run <code>rm -rf ~/.emacs.d/elpa</code> in your shell (<code>.emacs.d/elpa/</code> is the directory where Emacs keeps the packages it installs) and restart Emacs. You should see Emacs downloading and installing evil in a split window. Unfortunately it leaves the compilation log buffer open in the bottom window, which you can close by typing <code>&lt;Ctrl&gt;-w o</code> in the top window. (I don’t have a solution for this yet, sorry).</p>
+
+<h2>Extra Credit</h2>
+
+<h3>Lose the Toolbar and Menu</h3>
+
+<p>Do you like that toolbar that takes up like 5% of the screen? Do you want to be constantly reaching for the mouse to dig through a bunch of menus? (A: No!)</p>
+
+<p>That’s what I thought. Put these lines at the end of your <code>init.el</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="nv">tool-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nv">menu-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart Emacs, and— ahh! Much better! You can never have too much screen real-estate. If you do want to show the menu temporarily, just type <code>:menu-bar-mode</code> to toggle the menu on and off.</p>
+
+<h3>Colors!</h3>
+
+<p>Okay, it has colors, but do we really think the default color scheme is the best we can do? Personally, I suggest the <a href="https://github.com/lvillani/el-monokai-theme">monokai theme</a>, for which we can install a package from MELPA. Now, we <em>could</em> just add <code>(ensure-package 'monokai)</code> to the <code>init.el</code> file, but I think we can do better. Delete the <code>(ensure-package 'evil)</code> line and add the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">packages</span> <span class="o">&#39;</span><span class="p">(</span>
+</span><span class='line'>                 <span class="nv">evil</span>
+</span><span class='line'>                 <span class="nv">monokai-theme</span>
+</span><span class='line'>                 <span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">mapcar</span> <span class="ss">&#39;ensure-package</span> <span class="nv">packages</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you’re not familiar with Lisp, <code>(setq x '(…))</code> sets the value of variable <code>x</code> to whatever the other argument is, in this case a quoted list. <code>(mapcar 'f x)</code> applies the function named <code>f</code> to each member of list <code>x</code>. In other words, we call <code>ensure-package</code> on every package named in <code>packages</code>. For just two packages, this is more work than necessary, but as you want to add more packages, all you need to do is add the package name to the list, and it will be installed next time you start Emacs!</p>
+
+<p>Of course, just installing the package doesn’t cut it, so add <code>(load-theme 'monokai t)</code> to the end of your <code>init.el</code> (you can put it anywhere, actually, I just think it feels right as the last thing in the file).</p>
+
+<p>If you don’t like Monokai, you can try <a href="https://github.com/sellout/emacs-color-theme-solarized">Solarized for Emacs</a> (add <code>color-theme-solarized</code> to <code>packages</code> and <code>(load-theme 'solarized-[light|dark] t)</code> instead of <code>(load-theme 'monokai t)</code>).</p>
+
+<h2>tl;dr</h2>
+
+<p>Download the file at <a href="https://gist.github.com/cordarei/9600170">https://gist.github.com/cordarei/9600170</a> to <code>~/.emacs.d/init.el</code>, start Emacs, and enjoy Vim keybindings in Emacs!</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>This has been my experience at least, for two reasons: editing Japanese in GVim on windows has sucked for me; and the package manager in Emacs 24 beats fapping around with git/pathogen/Vundle in windows.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Vimscript is really not that bad, it&rsquo;s just that Lisp is better, plus Emacs supports things like inferior processes.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>GitHub is nice.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>I found someone saying <a href="http://ergoemacs.org/emacs/swap_CapsLock_Ctrl.html">you should NOT swap Caps Lock with Control</a> for the first time when writing this post; YMMV but I prefer Control in the Caps Lock position.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>I thought this would work before I tried it just now, but it didn’t :(<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress on GitHub Pages for Dummies (Me)]]></title>

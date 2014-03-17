@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>gensym("blog")</title>
+  <title>Moving to Emacs From Vim - gensym("blog")</title>
   <meta name="author" content="Joseph Irwin">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cordarei.github.io">
+  <link rel="canonical" href="http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="gensym("blog")" type="application/atom+xml">
@@ -63,15 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/03/17/moving-to-emacs-from-vim/">Moving to Emacs From Vim</a></h1>
+      <h1 class="entry-title">Moving to Emacs From Vim</h1>
     
     
       <p class="meta">
@@ -94,7 +91,7 @@
   </header>
 
 
-  <div class="entry-content"><p>So you&rsquo;re a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant <em>I</em>—<em>I</em> am a dye-in-the-wool vimmer and <em>I</em> want to use Emacs.) Let us go on a journey together…</p>
+<div class="entry-content"><p>So you&rsquo;re a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant <em>I</em>—<em>I</em> am a dye-in-the-wool vimmer and <em>I</em> want to use Emacs.) Let us go on a journey together…</p>
 
 <h2>Reasons</h2>
 
@@ -258,22 +255,16 @@
 </div>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/13/octopress-on-github-pages-for-dummies/">Octopress on GitHub Pages for Dummies (Me)</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Joseph Irwin</span></span>
+
+      
 
 
 
@@ -285,99 +276,32 @@
   
 
 
-<time datetime="2014-03-13T02:42:08+09:00" pubdate data-updated="true">Mar 13<span>th</span>, 2014</time>
-        
-      </p>
+<time datetime="2014-03-17T12:47:22+09:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
+      
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>Follow these steps to create a blog using Octopress on GitHub. I&rsquo;m assuming you have a system ruby installed; preferably you&rsquo;re using Arch Linux, because that&rsquo;s what I used.</p>
-
-<h3>1. First &mdash; don&rsquo;t read the documentation on github.com</h3>
-
-<p>Don&rsquo;t bother reading the help documents about GitHub Pages and Jekyll at <a href="https://help.github.com/articles/using-jekyll-with-pages">https://help.github.com/articles/using-jekyll-with-pages</a> ; in Octopress everything is generated outside of Github.</p>
-
-<h3>2. Don&rsquo;t run <code>git clone https://github.com/imathis/octopress</code> yet</h3>
-
-<p>First, if you have a user pages <code>&lt;user&gt;.github.io</code> repository on GitHub &mdash; delete it! Octopress works by forking the Octopress repository and adding your content on top of it. I&rsquo;m not even sure if it&rsquo;s possible to merge the history from two different repositories in git, but I bet it&rsquo;s not worth the trouble. Just delete it (back it up first if it has anything in it &mdash; or you could just rename it).</p>
-
-<p>Now create a new <code>&lt;user&gt;.github.io</code> repository, and UNCHECK all the boxes: no <code>README</code>, no license, no <code>.gitignore</code> &mdash; we want a blank repository with no commits.</p>
-
-<h3>3. Okay, <strong>now</strong> <code>git clone https://github.com/imathis/octopress</code></h3>
-
-<h3>4. Run <code>gem install bundler</code></h3>
-
-<p>You need bundler to do everything else, and on Arch Linux it should install under $HOME/.gem/</p>
-
-<h3>5. <strong>DON&rsquo;T</strong> run <code>bundle install</code>! (If you&rsquo;re using Arch Linux)</h3>
-
-<p>This is important: bundle will ignore that gem is set to install locally (<code>--user-install</code>) by default on Arch Linux, and install everything in <code>/usr</code>. (Okay, you can cancel when it asks for your sudo password, but still). Plus it will install the dependencies for Octopress/Jekyll mixed with anything else you have installed, which is annoying, at least.</p>
-
-<p>You will need to add <code>export GEM_HOME=$(ruby -e 'puts Gem.user_dir')</code> to your shell (~/.zshrc or ~/.bashrc) to get bundler to install gems under your home directory (see <a href="https://wiki.archlinux.org/index.php/ruby#Bundler">https://wiki.archlinux.org/index.php/ruby#Bundler</a> ). However, this is negated by our next step:</p>
-
-<p>Run <code>bundler install --path .bundle</code>. This will make bundler install the dependencies listed in the <code>Gemfile</code> into <code>.bundle/</code>, which is much easier to clean up <sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
-
-<h3>6. Don&rsquo;t run <code>rake setup_github_pages</code></h3>
-
-<p>Since we made bundler install the gems into <code>.bundle/</code>, they aren&rsquo;t on the PATH. To run the rake installed by bundler, we would need to type <code>bundle exec rake &lt;task&gt;</code>. I for one refuse to type that more than once, so do <code>alias rake='bundle exec rake'</code> to make things easier temporarily (I don&rsquo;t have a permanent solution for this yet).</p>
-
-<h3>7. Whew! Now run <code>rake setup_github_pages</code></h3>
-
-<h3>8. Don&rsquo;t run <code>rake generate</code> yet</h3>
-
-<p>First edit <code>_config.yml</code> to customize your site: change some things like <code>title:</code>, <code>subtitle:</code>, <code>author:</code> and maybe add your username to <code>github_user:</code> if you want.</p>
-
-<h3>9. Finally! Run <code>rake generate</code> and then <code>rake deploy</code></h3>
-
-<ul>
-<li><p>you should see a bunch of output, some of which may be <code>git</code> telling you about missing tracking information for the current branch (don&rsquo;t worry about this yet)</p></li>
-<li><p>you should have <code>source</code>, <code>sass</code>, <code>_deploy</code>, and <code>public</code> directories now</p></li>
-<li><p>if you do <code>git status</code>, you should see changes in <code>Rakefile</code> and <code>_config.yml</code>, and untracked directories <code>sass</code> and <code>source</code></p></li>
-<li><p>you should be able to see your new site at <code>http://&lt;user&gt;.github.io/</code> now (GitHub documentation says it may take a few minutes; I personally haven&rsquo;t seen a delay in updating yet).</p></li>
-</ul>
-
-
-<h3>10. Now do <code>git add .</code> and <code>git commit</code>, write a commit message and then <code>git push origin source</code></h3>
-
-<p>With Octopress, the source for generating the site is kept on the &lsquo;source&rsquo; branch, and the generated files are committed and pushed to the &lsquo;master&rsquo; branch automatically by <code>rake deploy</code></p>
-
-<hr />
-
-<p>Now, you could continue to develop your site, add some posts and whatnot &mdash; but I recommend you do two things first:</p>
-
-<ul>
-<li><code>cd ..; rm -rf octopress</code></li>
-<li><code>git clone -b source git@github.com:&lt;username&gt;/&lt;username&gt;.github.io</code></li>
-<li><code>cd &lt;username&gt;.github.io</code></li>
-<li><code>git clone -b master git@github.com:&lt;username&gt;/&lt;username&gt;.github.io _deploy</code><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></li>
-</ul>
-
-
-<p>This will help <code>git</code> get straightened out with all of the remote tracking branches etc. The only problem is you have to run <code>bundle install --path .bundle</code> again &mdash; oops. Of course I thought of that before deleting the original directory&hellip;</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>technically, it is <em>possible</em> to uninstall gems (see http://stackoverflow.com/a/21385516/32683 or http://stackoverflow.com/a/8095234/32683 &mdash; where would the world be without StackOverflow?)<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>see, e.g., http://robstrube.com/blog/2014/02/21/setting-up-an-existing-octopress-site-on-a-new-system/ or http://weishi.github.io/blog/2013/07/24/setup-an-existing-octopress-repository-after-git-clone/ &mdash; seriously, do the Octopress people really expect no one to ever move to a different computer?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-</ol>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim/" data-via="" data-counturl="http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim/" >Tweet</a>
+  
+  
+  
 </div>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
     
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/13/octopress-on-github-pages-for-dummies/" title="Previous Post: Octopress on GitHub Pages for Dummies (Me)">&laquo; Octopress on GitHub Pages for Dummies (Me)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -398,7 +322,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/cordarei">@cordarei</a> on GitHub
@@ -430,6 +354,7 @@
 
   
 </aside>
+
 
     </div>
   </div>
