@@ -9,7 +9,7 @@
   <meta name="author" content="Joseph Irwin">
 
   
-  <meta name="description" content="So you&rsquo;re a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant I—I am a dye-in-the-wool vimmer and I want to use Emacs.) &hellip;">
+  <meta name="description" content="So in the last post, we got Emacs working nicely with Vim keybindings using evil. But there is one keybinding that immediately started bugging me: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,7 +71,60 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/03/17/moving-to-emacs-from-vim/">Moving to Emacs From Vim</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/03/18/moving-to-emacs-from-vim-part-1-dot-5/">Moving to Emacs from Vim Part 1.5</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-18T15:10:15+09:00" pubdate data-updated="true">Mar 18<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So in the <a href="http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim/">last post</a>, we got Emacs working nicely with Vim keybindings using evil. But there is one keybinding that immediately started bugging me:</p>
+
+<p>Emacs binds <code>&lt;Ctrl&gt;-h</code> to the help command. For example, you press <code>&lt;Ctrl&gt;-h k</code> and then press a key to get information on functions bound to that key; you press <code>&lt;Ctrl&gt;-h f</code> and enter a function name to get help on that function, etc.</p>
+
+<p>Now I don&rsquo;t know about you, but having basically lived in the terminal for years now, I am used to <code>&lt;Ctrl&gt;-h</code> sending a backspace character, which works in the shell and in Vim. And while help is undeniably useful (Vim&rsquo;s help is really great, by the way), I&rsquo;m not sure it should be bound to a key in the <strong>home row</strong>. So let&rsquo;s fix that:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="nv">define-key</span> <span class="nv">key-translation-map</span> <span class="nv">[?\C-h]</span> <span class="nv">[?\C-?]</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;M-h&quot;</span><span class="p">)</span> <span class="ss">&#39;help-command</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Add these lines anywhere in <code>~/.emacs.d/init.el</code>. I put them just above <code>(tool-bar-mode -1)</code>.</p>
+
+<p>And that&rsquo;s it! You can happily use <code>&lt;Ctrl&gt;-h</code> to backspace to your heart&rsquo;s content. If you do want to access Emac&rsquo;s help, you can press <code>&lt;Alt&gt;-h</code> instead. By default, <code>&lt;Alt&gt;-h</code> is bound to <code>mark-paragraph</code>, which we don&rsquo;t need because evil allows us to select a paragraph by pressing <code>vip</code>, just like in Vim.</p>
+
+<p>You can read more at the <a href="http://www.emacswiki.org/emacs-en/BackspaceKey">Emacs Wiki</a>, which is where I found the above lines.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/17/moving-to-emacs-from-vim/">Moving to Emacs from Vim</a></h1>
     
     
       <p class="meta">
@@ -94,7 +147,7 @@
   </header>
 
 
-  <div class="entry-content"><p>So you&rsquo;re a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant <em>I</em>—<em>I</em> am a dye-in-the-wool vimmer and <em>I</em> want to use Emacs.) Let us go on a journey together…</p>
+  <div class="entry-content"><p>So you&rsquo;re a dyed-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant <em>I</em>—<em>I</em> am a dyed-in-the-wool vimmer and <em>I</em> want to use Emacs.) Let us go on a journey together…</p>
 
 <h2>Reasons</h2>
 
@@ -385,7 +438,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/03/17/moving-to-emacs-from-vim/">Moving to Emacs From Vim</a>
+        <a href="/blog/2014/03/18/moving-to-emacs-from-vim-part-1-dot-5/">Moving to Emacs from Vim Part 1.5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/moving-to-emacs-from-vim/">Moving to Emacs from Vim</a>
       </li>
     
       <li class="post">
