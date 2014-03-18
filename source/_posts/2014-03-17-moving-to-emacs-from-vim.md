@@ -3,11 +3,11 @@ layout: post
 title: "Moving to Emacs from Vim"
 date: 2014-03-17 12:47:22 +0900
 comments: true
-categories: 
+categories:
 ---
 
 
-So you're a dye-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant *I*—*I* am a dye-in-the-wool vimmer and *I* want to use Emacs.) Let us go on a journey together…
+So you're a dyed-in-the-wool vimmer, but now you want to use Emacs? (Sorry, I meant *I*—*I* am a dyed-in-the-wool vimmer and *I* want to use Emacs.) Let us go on a journey together…
 
 ## Reasons
 
