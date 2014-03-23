@@ -4,7 +4,7 @@
   <title><![CDATA[gensym("blog")]]></title>
   <link href="http://cordarei.github.io/atom.xml" rel="self"/>
   <link href="http://cordarei.github.io/"/>
-  <updated>2014-03-18T18:46:14+09:00</updated>
+  <updated>2014-03-23T15:43:20+09:00</updated>
   <id>http://cordarei.github.io/</id>
   <author>
     <name><![CDATA[Joseph Irwin]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Vim to Emacs Part 2: use-package]]></title>
+    <link href="http://cordarei.github.io/blog/2014/03/23/vim-to-emacs-part-2-use-package/"/>
+    <updated>2014-03-23T14:54:34+09:00</updated>
+    <id>http://cordarei.github.io/blog/2014/03/23/vim-to-emacs-part-2-use-package</id>
+    <content type="html"><![CDATA[<p>As I start to add more packages and customizations to my emacs configuration, it would be a good idea to have a plan for organizing things to keep it manageable. Funnily enough, there is a package called <a href="https://github.com/jwiegley/use-package">use-package</a> that seems like it will be useful in this endeavor, so let&rsquo;s use it.</p>
+
+<p>First, you can read more about <code>use-package</code> at its <a href="https://github.com/jwiegley/use-package">Github repository</a>, <a href="http://www.reddit.com/r/emacs/comments/1r4qvs/john_wiegleys_usepackage_and_bindkey/">this reddit thread</a>, or <a href="http://ericjmritz.name/2013/11/25/simplify-emacs-configuration-with-use-package/">this blog post</a>. The main advantages of <code>use-package</code> for my purposes are:</p>
+
+<ul>
+<li>the <code>:ensure</code> keyword automatically installs packages (replaces my <code>ensure-package</code> function)</li>
+<li>it helps centralize configuration related to each package</li>
+<li>it can defer executing code for packages which are only needed in certain modes</li>
+</ul>
+
+
+<p>The last two are not such a concern yet, but will be useful in the future.</p>
+
+<p>I have refactored the <code>init.el</code> file from before. You can see the new contents below (with comments), or just <a href="https://gist.githubusercontent.com/cordarei/9719297/raw/1ede54fd18d59c31fbbb6de03a03cdcad6c4b1bb/init.el">download the raw file</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; setup for requiring and installing packages</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;cl</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;package</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; add extra ELPA archives</span>
+</span><span class='line'><span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;package-archives</span>
+</span><span class='line'>             <span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;melpa&quot;</span> <span class="o">.</span> <span class="s">&quot;http://melpa.milkbox.net/packages/&quot;</span><span class="p">)</span> <span class="no">t</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; initialize package system</span>
+</span><span class='line'><span class="p">(</span><span class="nv">package-initialize</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; get list of packages if not present</span>
+</span><span class='line'><span class="p">(</span><span class="nb">unless</span> <span class="nv">package-archive-contents</span>
+</span><span class='line'>  <span class="p">(</span><span class="nv">package-refresh-contents</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; make sure use-package is installed (we&#39;ll use it to install other packages)</span>
+</span><span class='line'><span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">package-installed-p</span> <span class="ss">&#39;use-package</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nv">package-install</span> <span class="ss">&#39;use-package</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; make use-package available</span>
+</span><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;use-package</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; set up individual packages</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; evil-mode</span>
+</span><span class='line'><span class="p">(</span><span class="nb">use-package</span> <span class="nv">evil</span>
+</span><span class='line'>  <span class="ss">:ensure</span> <span class="nv">evil</span>
+</span><span class='line'>  <span class="ss">:config</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">progn</span> <span class="p">(</span><span class="nv">evil-mode</span> <span class="mi">1</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; monokai theme</span>
+</span><span class='line'><span class="p">(</span><span class="nb">use-package</span> <span class="nv">monokai-theme</span>
+</span><span class='line'>  <span class="ss">:ensure</span> <span class="nv">monokai-theme</span>
+</span><span class='line'>  <span class="ss">:config</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">progn</span> <span class="p">(</span><span class="nv">load-theme</span> <span class="ss">&#39;monokai</span> <span class="no">t</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; set up interface customizations</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; keybindings:</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nv">define-key</span> <span class="nv">key-translation-map</span> <span class="nv">[?\C-h]</span> <span class="nv">[?\C-?]</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;M-h&quot;</span><span class="p">)</span> <span class="ss">&#39;help-command</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; GUI settings:</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nv">tool-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nv">menu-bar-mode</span> <span class="mi">-1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I got rid of <code>ensure-package</code> and made some changes based on the Stack Overflow question <a href="http://stackoverflow.com/questions/14836958/updating-packages-in-emacs">here</a>. It makes sense to me for updating packages to be manually invoked, so we can think of our process as: for a new system with no packages (and no package-archive-contents), we first fetch the list of packages, install <code>use-package</code>, and use <code>use-package</code> to install and configure our other packages; in normal use, our packages are already installed and <code>use-package</code> configures them. When we want to add a package, just add <code>(use-package &lt;package&gt; ...)</code> to our config file and let <code>use-package</code> install it for us.</p>
+
+<p>For upgrading packages, it may make sense to have a function to do everything necessary (I haven&rsquo;t looking into what that would be) that I can invoke in one step. Alternatively, I could just nuke <code>~/.emacs.d/elpa/</code> &mdash; (not-so-)instant upgrade!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving to Emacs from Vim Part 1.5]]></title>
