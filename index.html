@@ -9,7 +9,7 @@
   <meta name="author" content="Joseph Irwin">
 
   
-  <meta name="description" content="As I start to add more packages and customizations to my emacs configuration, it would be a good idea to have a plan for organizing things to keep it &hellip;">
+  <meta name="description" content="Here are some recent improvements I made to my Emacs startup. The full file with these changes is on GitHub. Disable toolbar and menu at the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,85 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/31/vim-to-emacs-part-3-startup/">Vim to Emacs Part 3: Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-31T18:06:27+09:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here are some recent improvements I made to my Emacs startup. The full file with these changes is <a href="https://github.com/cordarei/dotfiles/blob/728d8ff01ef70e241daaa4e9e4fb82e5437094fc/emacs.d/init.el">on GitHub</a>.</p>
+
+<h2>Disable toolbar and menu at the beginning</h2>
+
+<p>Since there can be a noticeable delay while Emacs processes the init file, especially if it is downloading packages, it&rsquo;s better to customize the GUI as early as possible to avoid the window jumping around. I also made <code>monokai-theme</code> the first package I <code>require</code> after <code>use-package</code>, although I think this has limited utility.</p>
+
+<p>Add these lines to the beginning of <code>~/.emacs.d/init.el</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; remove GUI stuff</span>
+</span><span class='line'><span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">&#39;menu-bar-mode</span><span class="p">)</span> <span class="p">(</span><span class="nv">menu-bar-mode</span> <span class="mi">-1</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">&#39;tool-bar-mode</span><span class="p">)</span> <span class="p">(</span><span class="nv">tool-bar-mode</span> <span class="mi">-1</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">&#39;scroll-bar-mode</span><span class="p">)</span> <span class="p">(</span><span class="nv">scroll-bar-mode</span> <span class="mi">-1</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Don&rsquo;t show GNU start screen</h2>
+
+<p>Get rid of the GNU splash/startup screen, and also remove the unnecessary message in the <code>*scratch*</code> buffer:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; show blank *scratch* buffer at start</span>
+</span><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">inhibit-startup-screen</span> <span class="no">t</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">initial-scratch-message</span> <span class="no">nil</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Disable bell</h2>
+
+<p>I can&rsquo;t really express just how much I hate the bell. I disable it in Vim, I once even went so far as to unhook the internal PC speaker from the motherboard of one machine. It&rsquo;s often suggested to <code>(setq visual-bell t)</code>, but that makes Emacs flash the window which is almost as annoying. Here&rsquo;s how to disable it entirely (from <a href="http://stackoverflow.com/a/11679711">this StackOverflow answer</a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; disable bell</span>
+</span><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">ring-bell-function</span> <span class="ss">&#39;ignore</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -592,6 +671,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/31/vim-to-emacs-part-3-startup/">Vim to Emacs Part 3: Startup</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/23/vim-to-emacs-part-2-use-package/">Vim to Emacs Part 2: use-package</a>

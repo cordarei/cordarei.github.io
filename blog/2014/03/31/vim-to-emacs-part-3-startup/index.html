@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Moving to Emacs from Vim Part 1.5 - gensym("blog")</title>
+  <title>Vim to Emacs Part 3: Startup - gensym("blog")</title>
   <meta name="author" content="Joseph Irwin">
 
   
-  <meta name="description" content="So in the last post, we got Emacs working nicely with Vim keybindings using evil. But there is one keybinding that immediately started bugging me: &hellip;">
+  <meta name="description" content="Here are some recent improvements I made to my Emacs startup. The full file with these changes is on GitHub. Disable toolbar and menu at the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cordarei.github.io/blog/2014/03/18/moving-to-emacs-from-vim-part-1-dot-5">
+  <link rel="canonical" href="http://cordarei.github.io/blog/2014/03/31/vim-to-emacs-part-3-startup">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="gensym("blog")" type="application/atom+xml">
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Moving to Emacs from Vim Part 1.5</h1>
+      <h1 class="entry-title">Vim to Emacs Part 3: Startup</h1>
     
     
       <p class="meta">
@@ -84,31 +84,57 @@
   
 
 
-<time datetime="2014-03-18T15:10:15+09:00" pubdate data-updated="true">Mar 18<span>th</span>, 2014</time>
+<time datetime="2014-03-31T18:06:27+09:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>So in the <a href="http://cordarei.github.io/blog/2014/03/17/moving-to-emacs-from-vim/">last post</a>, we got Emacs working nicely with Vim keybindings using evil. But there is one keybinding that immediately started bugging me:</p>
+<div class="entry-content"><p>Here are some recent improvements I made to my Emacs startup. The full file with these changes is <a href="https://github.com/cordarei/dotfiles/blob/728d8ff01ef70e241daaa4e9e4fb82e5437094fc/emacs.d/init.el">on GitHub</a>.</p>
 
-<p>Emacs binds <code>&lt;Ctrl&gt;-h</code> to the help command. For example, you press <code>&lt;Ctrl&gt;-h k</code> and then press a key to get information on functions bound to that key; you press <code>&lt;Ctrl&gt;-h f</code> and enter a function name to get help on that function, etc.</p>
+<h2>Disable toolbar and menu at the beginning</h2>
 
-<p>Now I don&rsquo;t know about you, but having basically lived in the terminal for years now, I am used to <code>&lt;Ctrl&gt;-h</code> sending a backspace character, which works in the shell and in Vim. And while help is undeniably useful (Vim&rsquo;s help is really great, by the way), I&rsquo;m not sure it should be bound to a key in the <strong>home row</strong>. So let&rsquo;s fix that:</p>
+<p>Since there can be a noticeable delay while Emacs processes the init file, especially if it is downloading packages, it&rsquo;s better to customize the GUI as early as possible to avoid the window jumping around. I also made <code>monokai-theme</code> the first package I <code>require</code> after <code>use-package</code>, although I think this has limited utility.</p>
+
+<p>Add these lines to the beginning of <code>~/.emacs.d/init.el</code>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="p">(</span><span class="nv">define-key</span> <span class="nv">key-translation-map</span> <span class="nv">[?\C-h]</span> <span class="nv">[?\C-?]</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;M-h&quot;</span><span class="p">)</span> <span class="ss">&#39;help-command</span><span class="p">)</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; remove GUI stuff</span>
+</span><span class='line'><span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">&#39;menu-bar-mode</span><span class="p">)</span> <span class="p">(</span><span class="nv">menu-bar-mode</span> <span class="mi">-1</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">&#39;tool-bar-mode</span><span class="p">)</span> <span class="p">(</span><span class="nv">tool-bar-mode</span> <span class="mi">-1</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">&#39;scroll-bar-mode</span><span class="p">)</span> <span class="p">(</span><span class="nv">scroll-bar-mode</span> <span class="mi">-1</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Add these lines anywhere in <code>~/.emacs.d/init.el</code>. I put them just above <code>(tool-bar-mode -1)</code>.</p>
+<h2>Don&rsquo;t show GNU start screen</h2>
 
-<p>And that&rsquo;s it! You can happily use <code>&lt;Ctrl&gt;-h</code> to backspace to your heart&rsquo;s content. If you do want to access Emac&rsquo;s help, you can press <code>&lt;Alt&gt;-h</code> instead. By default, <code>&lt;Alt&gt;-h</code> is bound to <code>mark-paragraph</code>, which we don&rsquo;t need because evil allows us to select a paragraph by pressing <code>vip</code>, just like in Vim.</p>
+<p>Get rid of the GNU splash/startup screen, and also remove the unnecessary message in the <code>*scratch*</code> buffer:</p>
 
-<p>You can read more at the <a href="http://www.emacswiki.org/emacs-en/BackspaceKey">Emacs Wiki</a>, which is where I found the above lines.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; show blank *scratch* buffer at start</span>
+</span><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">inhibit-startup-screen</span> <span class="no">t</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">initial-scratch-message</span> <span class="no">nil</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Disable bell</h2>
+
+<p>I can&rsquo;t really express just how much I hate the bell. I disable it in Vim, I once even went so far as to unhook the internal PC speaker from the motherboard of one machine. It&rsquo;s often suggested to <code>(setq visual-bell t)</code>, but that makes Emacs flash the window which is almost as annoying. Here&rsquo;s how to disable it entirely (from <a href="http://stackoverflow.com/a/11679711">this StackOverflow answer</a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='cl'><span class='line'><span class="c1">;; disable bell</span>
+</span><span class='line'><span class="p">(</span><span class="k">setq</span> <span class="nv">ring-bell-function</span> <span class="ss">&#39;ignore</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
 
 
@@ -131,7 +157,7 @@
   
 
 
-<time datetime="2014-03-18T15:10:15+09:00" pubdate data-updated="true">Mar 18<span>th</span>, 2014</time>
+<time datetime="2014-03-31T18:06:27+09:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
       
 
 
@@ -139,7 +165,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cordarei.github.io/blog/2014/03/18/moving-to-emacs-from-vim-part-1-dot-5/" data-via="" data-counturl="http://cordarei.github.io/blog/2014/03/18/moving-to-emacs-from-vim-part-1-dot-5/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cordarei.github.io/blog/2014/03/31/vim-to-emacs-part-3-startup/" data-via="" data-counturl="http://cordarei.github.io/blog/2014/03/31/vim-to-emacs-part-3-startup/" >Tweet</a>
   
   
   
@@ -148,10 +174,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/03/17/moving-to-emacs-from-vim/" title="Previous Post: Moving to Emacs from Vim">&laquo; Moving to Emacs from Vim</a>
+        <a class="basic-alignment left" href="/blog/2014/03/23/vim-to-emacs-part-2-use-package/" title="Previous Post: Vim to Emacs Part 2: use-package">&laquo; Vim to Emacs Part 2: use-package</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/03/23/vim-to-emacs-part-2-use-package/" title="Next Post: Vim to Emacs Part 2: use-package">Vim to Emacs Part 2: use-package &raquo;</a>
       
     </p>
   </footer>
